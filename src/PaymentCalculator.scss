@@ -4,4 +4,17 @@
 .PaymentCalculator {
   @include body-text;
   margin: 10px;
+  width: 100%;
+}
+
+.PaymentCalculator__table {
+  width: 100%;
+}
+
+.PaymentCalculator__cell,
+.PaymentCalculator__number {
+  @include number-text;
+  text-align: right;
+  padding: 5px 5px 5px 20px;
+  column-span: all;
 }

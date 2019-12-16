@@ -21,3 +21,7 @@ $font-monospace: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
   font-size: 18px;
   line-height: 1.2;
 }
+
+@mixin number-text {
+  @include font-monospace;
+}
