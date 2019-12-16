@@ -1,15 +1,25 @@
 import React, { useState } from "react";
 import "./Form.scss";
 
-export default function Form() {
-  const [loanAmount, setLoanAmount] = useState(100000);
-  const [loanInterest, setLoanInterest] = useState(4.0);
-  const [loanDuration, setLoanDuration] = useState(30);
-  const [propertyTax, setPropertyTax] = useState(3600);
-  const [propertyInsurance, setPropertyInsurance] = useState(3600);
+export default function Form(props) {
+  const loanDetails = props.loanDetails;
+  const [loanAmount, setLoanAmount] = useState(loanDetails.loanAmount);
+  const [loanInterest, setLoanInterest] = useState(loanDetails.loanInterest);
+  const [loanDuration, setLoanDuration] = useState(loanDetails.loanDuration);
+  const [propertyTax, setPropertyTax] = useState(loanDetails.propertyTax);
+  const [propertyInsurance, setPropertyInsurance] = useState(
+    loanDetails.propertyInsurance
+  );
 
-  function handleSubmit() {
-    console.log("oh boy");
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    props.update({
+      loanAmount: loanAmount,
+      loanInterest: loanInterest,
+      loanDuration: loanDuration,
+      propertyTax: propertyTax,
+      propertyInsurance: propertyInsurance
+    });
   }
 
   return (
@@ -74,7 +84,11 @@ export default function Form() {
         </label>
       </fieldset>
 
-      <input className="Form__input Form__input--submit" type="submit" />
+      <input
+        className="Form__input Form__input--submit"
+        type="submit"
+        value="Calculate"
+      />
     </form>
   );
 }

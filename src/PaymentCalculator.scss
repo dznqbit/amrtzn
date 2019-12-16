@@ -1,0 +1,7 @@
+@import "./theme/colors.scss";
+@import "./theme/typography.scss";
+
+.PaymentCalculator {
+  @include body-text;
+  margin: 10px;
+}
