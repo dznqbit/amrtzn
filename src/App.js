@@ -1,31 +1,18 @@
-import React, { Component } from "react";
-import logo from "./logo.svg";
+import React from "react";
+import Form from "./Form";
 import "./App.scss";
-import Counter from "./components/Counter";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App__header">
-          <Counter />
-          <img src={logo} className="App__logo" alt="logo" />
-          <p>
-            Edit <code className="App__code">src/App.js</code> and save to
-            reload.
-          </p>
-          <a
-            className="App__link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="App">
+      <header className="App__header">
+        <h1>amrtzn</h1>
+      </header>
+      <main>
+        <Form />
+      </main>
+    </div>
+  );
 }
 
 export default App;
