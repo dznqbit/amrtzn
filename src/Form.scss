@@ -1,0 +1,39 @@
+@import "./theme/colors.scss";
+@import "./theme/typography.scss";
+
+.Form {
+  @include body-text;
+  padding: 5px 0;
+
+  border: 2px solid #222;
+}
+
+.Form__fieldset {
+  border: none;
+}
+
+.Form__field {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+}
+
+.Form__label {
+  flex-basis: 200px;
+}
+
+.Form__input {
+  @include body-text;
+
+  &--numeric {
+    @include font-monospace;
+  }
+
+  &--submit {
+    color: $white;
+    padding: 5px 10px;
+    margin-left: 15px;
+    background: #222;
+    border: none;
+  }
+}
