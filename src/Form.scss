@@ -27,6 +27,8 @@
 
   &--numeric {
     @include font-monospace;
+    text-align: right;
+    padding-right: 10px;
   }
 
   &--submit {

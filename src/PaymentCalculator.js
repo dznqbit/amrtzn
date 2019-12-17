@@ -68,6 +68,7 @@ export default function PaymentCalculator(props) {
             displayType="text"
             prefix="$"
             decimalScale="2"
+            thousandSeparator={true}
           />
         </td>
         <td className="PaymentCalculator__number">
@@ -76,6 +77,7 @@ export default function PaymentCalculator(props) {
             displayType="text"
             prefix="$"
             decimalScale="2"
+            thousandSeparator={true}
           />
         </td>
         <td className="PaymentCalculator__number">
@@ -84,6 +86,7 @@ export default function PaymentCalculator(props) {
             displayType="text"
             prefix="$"
             decimalScale="2"
+            thousandSeparator={true}
           />
         </td>
         <td className="PaymentCalculator__number">
@@ -92,6 +95,7 @@ export default function PaymentCalculator(props) {
             displayType="text"
             prefix="$"
             decimalScale="2"
+            thousandSeparator={true}
           />
         </td>
         <td className="PaymentCalculator__number">
@@ -100,6 +104,7 @@ export default function PaymentCalculator(props) {
             displayType="text"
             prefix="$"
             decimalScale="2"
+            thousandSeparator={true}
           />
         </td>
       </tr>

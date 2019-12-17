@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NumberFormat from "react-number-format";
 import "./Form.scss";
 
 export default function Form(props) {
@@ -27,59 +28,69 @@ export default function Form(props) {
       <fieldset className="Form__fieldset">
         <label className="Form__field">
           <span className="Form__label">Amount</span>
-          <input
-            type="number"
-            min="0"
-            className="Form__input Form__input--numeric"
+          <NumberFormat
             value={loanAmount}
             onChange={e => setLoanAmount(e.target.value)}
+            prefix="$ "
+            suffix="  "
+            decimalScale="2"
+            decimalSeparator="."
+            thousandSeparator={true}
+            allowNegative={false}
+            className="Form__input Form__input--numeric"
           />
         </label>
 
         <label className="Form__field">
           <span className="Form__label">Interest</span>
-          <input
-            type="number"
-            min="0"
-            max="100"
-            step="0.001"
-            className="Form__input Form__input--numeric"
+          <NumberFormat
             value={loanInterest}
             onChange={e => setLoanInterest(e.target.value)}
+            suffix=" %"
+            decimalScale="3"
+            allowNegative={false}
+            className="Form__input Form__input--numeric"
           />
         </label>
 
         <label className="Form__field">
           <span className="Form__label">Duration</span>
-          <input
-            type="number"
-            min="0"
-            max="1024"
-            className="Form__input Form__input--numeric"
+          <NumberFormat
             value={loanDuration}
             onChange={e => setLoanDuration(e.target.value)}
+            suffix=" Y"
+            allowNegative={false}
+            className="Form__input Form__input--numeric"
           />
         </label>
 
         <label className="Form__field">
           <span className="Form__label">Annual Property Tax</span>
-          <input
-            type="number"
-            min="0"
-            className="Form__input Form__input--numeric"
+          <NumberFormat
             value={propertyTax}
             onChange={e => setPropertyTax(e.target.value)}
+            prefix="$ "
+            suffix="  "
+            decimalScale="2"
+            decimalSeparator="."
+            thousandSeparator={true}
+            allowNegative={false}
+            className="Form__input Form__input--numeric"
           />
         </label>
 
         <label className="Form__field">
           <span className="Form__label">Annual Property Insurance</span>
-          <input
-            type="number"
-            min="0"
-            className="Form__input Form__input--numeric"
+          <NumberFormat
             value={propertyInsurance}
             onChange={e => setPropertyInsurance(e.target.value)}
+            prefix="$ "
+            suffix="  "
+            decimalScale="2"
+            decimalSeparator="."
+            thousandSeparator={true}
+            allowNegative={false}
+            className="Form__input Form__input--numeric"
           />
         </label>
       </fieldset>
