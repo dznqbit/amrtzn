@@ -11,6 +11,10 @@ function parseLoanDetails(loanDetailsString) {
   let loanDetails = JSON.parse(loanDetailsString);
   loanDetails.loanStart = new Date(loanDetails.loanStart);
 
+  if (isNaN(loanDetails.loanStart)) {
+    loanDetails.loanStart = new Date();
+  }
+
   return loanDetails;
 }
 
