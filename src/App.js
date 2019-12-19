@@ -18,6 +18,9 @@ function parseLoanDetails(loanDetailsString) {
     loanDetails.loanStart = new Date();
   }
 
+  loanDetails.loanInterest = Number(loanDetails.loanInterest);
+  loanDetails.monthlyOverpay = Number(loanDetails.monthlyOverpay);
+
   return loanDetails;
 }
 
@@ -40,6 +43,7 @@ const App = () => {
       loanAmount: 300000,
       loanInterest: 4.0,
       loanDuration: 30,
+      monthlyOverpay: 0,
       propertyTax: 500,
       propertyInsurance: 1200
     }

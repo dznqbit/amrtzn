@@ -6,26 +6,61 @@
   padding: 5px 0;
 
   border: 2px solid #222;
+  display: flex;
+  flex-direction: row nowrap;
+}
+
+.Form__section {
+  flex-basis: 500px;
+  padding: 20px;
 }
 
 .Form__fieldset {
   border: none;
+  padding: 0;
+  margin: 0;
 }
 
 .Form__field {
   display: flex;
   flex-flow: row nowrap;
+  justify-content: space-between;
   align-items: baseline;
+  padding: 0 0 0 5px;
+
+  &:nth-child(odd) {
+    background-color: $gray-f0;
+  }
+}
+
+/* stylelint-disable */
+.Form__field input {
+  /* stylelint-enable */
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+
+/* stylelint-disable */
+  &:focus {
+  /* stylelint-enable */
+    border-bottom: 2px solid #bbb;
+  }
+}
+
+/* stylelint-disable */
+.Form__field > .react-datepicker-wrapper {
+  /* stylelint-enable */
+  margin-right: -18px;
 }
 
 /* stylelint-disable */
 .Form__field > .react-datepicker-wrapper input {
-/* stylelint-enable */
+  /* stylelint-enable */
   @include font-monospace;
   text-align: right;
   // Magically line the datepicker up with RHS of other inputs
-  padding-right: 32px;
-  width: calc(100% - 57px);
+  padding-right: 28px;
+  width: calc(100% - 53px);
 }
 
 .Form__label {
@@ -45,8 +80,8 @@
     color: $white;
     cursor: pointer;
     padding: 5px 10px;
-    margin-left: 15px;
     background: #222;
     border: none;
+    width: 100%;
   }
 }

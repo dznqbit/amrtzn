@@ -3,6 +3,7 @@ import NumberFormat from "react-number-format";
 
 import format from "date-fns/format";
 import addMonths from "date-fns/addMonths";
+import minimumMonthlyPayment from "./amrtzn/minimumMonthlyPayment";
 
 import "./PaymentCalculator.scss";
 
@@ -11,18 +12,14 @@ function formatDate(date) {
 }
 
 function calculateMonthlyPayments(loanDetails) {
-  const p = loanDetails.loanAmount,
-    d = loanDetails.loanDuration,
-    n = 12 * d,
+  const n = 12 * loanDetails.loanDuration,
     nominalInterestRate = loanDetails.loanInterest / 100.0,
     monthlyInterestRate = nominalInterestRate / 12.0,
     monthlyPropertyTax = loanDetails.propertyTax / 12.0,
-    monthlyPropertyInsurance = loanDetails.propertyInsurance / 12.0;
+    monthlyPropertyInsurance = loanDetails.propertyInsurance / 12.0,
+    monthlyOverpay = loanDetails.monthlyOverpay;
 
-  // https://en.wikipedia.org/wiki/Fixed-rate_mortgage
-  const paymentAmount =
-    (p * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -n)) +
-    (monthlyPropertyTax + monthlyPropertyInsurance);
+  let paymentRequired = minimumMonthlyPayment(loanDetails);
 
   let payments = [...Array(n).keys()].reduce(
     (acc, i) => {
@@ -32,19 +29,22 @@ function calculateMonthlyPayments(loanDetails) {
         interestDue = previousPrincipal * monthlyInterestRate,
         appliedToInterest = interestDue,
         appliedToPropertyTax = monthlyPropertyTax,
-        appliedToPropertyInsurance = monthlyPropertyInsurance,
-        appliedToPrincipal = Math.min(
-          mrp.principal,
-          paymentAmount -
-            (appliedToInterest +
-              appliedToPropertyTax +
-              appliedToPropertyInsurance)
-        ),
-        amountPaid =
-          appliedToPrincipal +
-          appliedToInterest +
-          appliedToPropertyTax +
-          appliedToPropertyInsurance;
+        appliedToPropertyInsurance = monthlyPropertyInsurance;
+      const appliedToPrincipal = Math.min(
+        mrp.principal,
+        paymentRequired +
+          monthlyOverpay -
+          (appliedToInterest +
+            appliedToPropertyTax +
+            appliedToPropertyInsurance)
+      );
+
+      const amountPaid =
+        appliedToPrincipal +
+        appliedToInterest +
+        appliedToPropertyTax +
+        appliedToPropertyInsurance;
+
       return acc.concat([
         {
           id: 1 + mrp.id || 1,
