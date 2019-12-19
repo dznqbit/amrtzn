@@ -1,7 +1,14 @@
 import React from "react";
 import NumberFormat from "react-number-format";
 
+import format from "date-fns/format";
+import addMonths from "date-fns/addMonths";
+
 import "./PaymentCalculator.scss";
+
+function formatDate(date) {
+  return format(date, "yyyy MMM");
+}
 
 function calculateMonthlyPayments(loanDetails) {
   const p = loanDetails.loanAmount,
@@ -17,22 +24,32 @@ function calculateMonthlyPayments(loanDetails) {
     (p * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -n)) +
     (monthlyPropertyTax + monthlyPropertyInsurance);
 
-  return [...Array(n)].reduce(
-    (acc, _) => {
+  let payments = [...Array(n).keys()].reduce(
+    (acc, i) => {
       const mrp = acc[acc.length - 1],
+        date = addMonths(loanDetails.loanStart, i),
         previousPrincipal = mrp.principal,
         interestDue = previousPrincipal * monthlyInterestRate,
         appliedToInterest = interestDue,
         appliedToPropertyTax = monthlyPropertyTax,
         appliedToPropertyInsurance = monthlyPropertyInsurance,
-        appliedToPrincipal =
+        appliedToPrincipal = Math.min(
+          mrp.principal,
           paymentAmount -
-          (appliedToInterest +
-            appliedToPropertyTax +
-            appliedToPropertyInsurance);
+            (appliedToInterest +
+              appliedToPropertyTax +
+              appliedToPropertyInsurance)
+        ),
+        amountPaid =
+          appliedToPrincipal +
+          appliedToInterest +
+          appliedToPropertyTax +
+          appliedToPropertyInsurance;
       return acc.concat([
         {
-          amount: paymentAmount,
+          id: 1 + mrp.id || 1,
+          date: formatDate(date),
+          amount: amountPaid,
           principal: mrp.principal - appliedToPrincipal,
           appliedToInterest: appliedToInterest,
           appliedToPrincipal: appliedToPrincipal,
@@ -41,8 +58,17 @@ function calculateMonthlyPayments(loanDetails) {
         }
       ]);
     },
-    [{ amount: 0.0, principal: loanDetails.loanAmount }]
+    [
+      {
+        date: formatDate(loanDetails.loanStart),
+        amount: 0.0,
+        principal: loanDetails.loanAmount
+      }
+    ]
   );
+
+  payments.shift();
+  return payments;
 }
 
 export default function PaymentCalculator(props) {
@@ -53,8 +79,11 @@ export default function PaymentCalculator(props) {
     .map(mp => mp)
     .map((mp, i) => (
       <tr className="PaymentCalculator__row" key={i}>
-        <td className="PaymentCalculator__cell">{i}</td>
-        <td className="PaymentCalculator__number">
+        <td className="PaymentCalculator__cell">{mp.id}</td>
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--date">
+          {mp.date}
+        </td>
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
             value={mp.principal}
             displayType="text"
@@ -62,7 +91,7 @@ export default function PaymentCalculator(props) {
             decimalScale="2"
           />
         </td>
-        <td className="PaymentCalculator__number">
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
             value={mp.amount}
             displayType="text"
@@ -71,7 +100,7 @@ export default function PaymentCalculator(props) {
             thousandSeparator={true}
           />
         </td>
-        <td className="PaymentCalculator__number">
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
             value={mp.appliedToPrincipal}
             displayType="text"
@@ -80,7 +109,7 @@ export default function PaymentCalculator(props) {
             thousandSeparator={true}
           />
         </td>
-        <td className="PaymentCalculator__number">
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
             value={mp.appliedToInterest}
             displayType="text"
@@ -89,7 +118,7 @@ export default function PaymentCalculator(props) {
             thousandSeparator={true}
           />
         </td>
-        <td className="PaymentCalculator__number">
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
             value={mp.appliedToPropertyTax}
             displayType="text"
@@ -98,7 +127,7 @@ export default function PaymentCalculator(props) {
             thousandSeparator={true}
           />
         </td>
-        <td className="PaymentCalculator__number">
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
             value={mp.appliedToPropertyInsurance}
             displayType="text"
@@ -112,16 +141,35 @@ export default function PaymentCalculator(props) {
 
   return (
     <div className="PaymentCalculator">
-      <table className="PaymentCalculator__table">
+      <table
+        className="PaymentCalculator__table"
+        cellspacing="0"
+        cellpadding="0"
+      >
         <thead>
           <tr>
             <th className="PaymentCalculator__cell">Id</th>
-            <th className="PaymentCalculator__cell">Principal</th>
-            <th className="PaymentCalculator__cell">Total Payment</th>
-            <th className="PaymentCalculator__cell">To Principal</th>
-            <th className="PaymentCalculator__cell">To Interest</th>
-            <th className="PaymentCalculator__cell">To Property Tax</th>
-            <th className="PaymentCalculator__cell">To Property Insurance</th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--date">
+              Date
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              Principal
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              Total Payment
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              To Principal
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              To Interest
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              To Property Tax
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              To Property Insurance
+            </th>
           </tr>
         </thead>
 

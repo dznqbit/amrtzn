@@ -3,10 +3,22 @@ import Form from "./Form";
 import PaymentCalculator from "./PaymentCalculator";
 import "./App.scss";
 
+function parseLoanDetails(loanDetailsString) {
+  if (!loanDetailsString) {
+    return null;
+  }
+
+  let loanDetails = JSON.parse(loanDetailsString);
+  loanDetails.loanStart = new Date(loanDetails.loanStart);
+
+  return loanDetails;
+}
+
 const useStateWithLocalStorage = (localStorageKey, defaultValue) => {
-  const [value, setValue] = useState(
-    JSON.parse(localStorage.getItem(localStorageKey)) || defaultValue
-  );
+  let serializedLocalValue = localStorage.getItem(localStorageKey);
+  let localValue = parseLoanDetails(serializedLocalValue);
+
+  const [value, setValue] = useState(localValue || defaultValue);
   React.useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(value));
   }, [localStorageKey, value]);
@@ -17,11 +29,12 @@ const App = () => {
   const [loanDetails, setLoanDetails] = useStateWithLocalStorage(
     "loanDetails",
     {
-      loanAmount: 100000,
+      loanStart: new Date(),
+      loanAmount: 300000,
       loanInterest: 4.0,
       loanDuration: 30,
-      propertyTax: 3600,
-      propertyInsurance: 3600
+      propertyTax: 500,
+      propertyInsurance: 1200
     }
   );
 

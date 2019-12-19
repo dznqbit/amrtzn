@@ -11,10 +11,18 @@
   width: 100%;
 }
 
-.PaymentCalculator__cell,
-.PaymentCalculator__number {
+.PaymentCalculator__row {
+  &:nth-child(odd) {
+    background-color: $gray-f0;
+  }
+}
+
+.PaymentCalculator__cell {
   @include number-text;
-  text-align: right;
+  text-align: left;
   padding: 5px 5px 5px 20px;
-  column-span: all;
+
+  &--number {
+    text-align: right;
+  }
 }

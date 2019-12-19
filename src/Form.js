@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import NumberFormat from "react-number-format";
+import DatePicker from "react-datepicker";
+
 import "./Form.scss";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Form(props) {
   const loanDetails = props.loanDetails;
+  const [loanStart, setLoanStart] = useState(loanDetails.loanStart);
   const [loanAmount, setLoanAmount] = useState(loanDetails.loanAmount);
   const [loanInterest, setLoanInterest] = useState(loanDetails.loanInterest);
   const [loanDuration, setLoanDuration] = useState(loanDetails.loanDuration);
@@ -14,7 +18,9 @@ export default function Form(props) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
+
     props.update({
+      loanStart: loanStart,
       loanAmount: loanAmount,
       loanInterest: loanInterest,
       loanDuration: loanDuration,
@@ -27,10 +33,15 @@ export default function Form(props) {
     <form className="Form" onSubmit={handleSubmit}>
       <fieldset className="Form__fieldset">
         <label className="Form__field">
+          <span className="Form__label">Start</span>
+          <DatePicker selected={loanStart} onChange={setLoanStart} />
+        </label>
+
+        <label className="Form__field">
           <span className="Form__label">Amount</span>
           <NumberFormat
             value={loanAmount}
-            onChange={e => setLoanAmount(e.target.value)}
+            onValueChange={v => setLoanAmount(v.value)}
             prefix="$ "
             suffix="  "
             decimalScale="2"
@@ -45,7 +56,7 @@ export default function Form(props) {
           <span className="Form__label">Interest</span>
           <NumberFormat
             value={loanInterest}
-            onChange={e => setLoanInterest(e.target.value)}
+            onValueChange={v => setLoanInterest(v.value)}
             suffix=" %"
             decimalScale="3"
             allowNegative={false}
@@ -57,7 +68,7 @@ export default function Form(props) {
           <span className="Form__label">Duration</span>
           <NumberFormat
             value={loanDuration}
-            onChange={e => setLoanDuration(e.target.value)}
+            onValueChange={v => setLoanDuration(v.value)}
             suffix=" Y"
             allowNegative={false}
             className="Form__input Form__input--numeric"
@@ -68,7 +79,7 @@ export default function Form(props) {
           <span className="Form__label">Annual Property Tax</span>
           <NumberFormat
             value={propertyTax}
-            onChange={e => setPropertyTax(e.target.value)}
+            onValueChange={v => setPropertyTax(v.value)}
             prefix="$ "
             suffix="  "
             decimalScale="2"
@@ -83,7 +94,7 @@ export default function Form(props) {
           <span className="Form__label">Annual Property Insurance</span>
           <NumberFormat
             value={propertyInsurance}
-            onChange={e => setPropertyInsurance(e.target.value)}
+            onValueChange={v => setPropertyInsurance(v.value)}
             prefix="$ "
             suffix="  "
             decimalScale="2"

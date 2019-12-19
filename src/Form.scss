@@ -18,6 +18,16 @@
   align-items: baseline;
 }
 
+/* stylelint-disable */
+.Form__field > .react-datepicker-wrapper input {
+/* stylelint-enable */
+  @include font-monospace;
+  text-align: right;
+  // Magically line the datepicker up with RHS of other inputs
+  padding-right: 32px;
+  width: calc(100% - 57px);
+}
+
 .Form__label {
   flex-basis: 200px;
 }
