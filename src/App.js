@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import Changelog from "./Changelog";
 import Form from "./Form";
 import PaymentCalculator from "./PaymentCalculator";
 import "./App.scss";
@@ -45,11 +48,20 @@ const App = () => {
   return (
     <div className="App">
       <header className="App__header">
-        <h1>amrtzn</h1>
+        <h1>
+          <a href="/" title="AMRTZN">
+            amrtzn.co
+          </a>
+        </h1>
       </header>
       <main>
-        <Form loanDetails={loanDetails} update={setLoanDetails} />
-        <PaymentCalculator loanDetails={loanDetails} />
+        <Router>
+          <Route path="/changelog" component={Changelog} />
+          <Route exact path="/">
+            <Form loanDetails={loanDetails} update={setLoanDetails} />
+            <PaymentCalculator loanDetails={loanDetails} />
+          </Route>
+        </Router>
       </main>
     </div>
   );

@@ -143,8 +143,8 @@ export default function PaymentCalculator(props) {
     <div className="PaymentCalculator">
       <table
         className="PaymentCalculator__table"
-        cellspacing="0"
-        cellpadding="0"
+        cellSpacing="0"
+        cellPadding="0"
       >
         <thead>
           <tr>

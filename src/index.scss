@@ -4,9 +4,17 @@
 //   1. Setting the style of the <body> element
 //   2. Loading webfonts
 
+@import "./theme/colors.scss";
+@import "./theme/typography.scss";
+
 body {
   margin: 0;
   padding: 0;
+}
+
+a {
+  color: $gray-28;
+  text-decoration: none;
 }
 
 // Example webfont declaration

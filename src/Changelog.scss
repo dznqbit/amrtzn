@@ -1,0 +1,10 @@
+@import "./theme/colors.scss";
+@import "./theme/typography.scss";
+
+.Changelog__header {
+  @include headline-text;
+}
+
+.Changelog__entry {
+  @include body-text;
+}
