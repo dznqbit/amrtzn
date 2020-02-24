@@ -20,44 +20,66 @@ function minimumMonthlyPayment(loanDetails) {
   return paymentRequired;
 }
 
-function calculateNextPayment(loanDetails, mostRecentPurchase) {
+// Return a payment object:
+// { amount, principal, appliedToInterest, appliedToPrincipal,
+//    appliedToPropertyTax, appliedToPropertyInsurance }
+function calculatePayment(amountPaid, loanDetails, remainingPrincipal) {
   const nominalInterestRate = loanDetails.loanInterest / 100.0,
     monthlyInterestRate = nominalInterestRate / 12.0,
     monthlyPropertyTax = loanDetails.propertyTax / 12.0,
     monthlyPropertyInsurance = loanDetails.propertyInsurance / 12.0,
-    monthlyOverpay = loanDetails.monthlyOverpay;
-
-  let paymentRequired = minimumMonthlyPayment(loanDetails);
-
-  const date = addMonths(mostRecentPurchase.date, 1),
-    interestDue = mostRecentPurchase.principal * monthlyInterestRate,
+    interestDue = remainingPrincipal * monthlyInterestRate,
     appliedToInterest = interestDue,
     appliedToPropertyTax = monthlyPropertyTax,
-    appliedToPropertyInsurance = monthlyPropertyInsurance;
-
-  const appliedToPrincipal = Math.min(
-    mostRecentPurchase.principal,
-    paymentRequired +
-      monthlyOverpay -
-      (appliedToInterest + appliedToPropertyTax + appliedToPropertyInsurance)
-  );
-
-  const amountPaid =
-    appliedToPrincipal +
-    appliedToInterest +
-    appliedToPropertyTax +
-    appliedToPropertyInsurance;
+    appliedToPropertyInsurance = monthlyPropertyInsurance,
+    appliedToPrincipal = Math.min(
+      remainingPrincipal,
+      amountPaid -
+        (appliedToInterest + appliedToPropertyTax + appliedToPropertyInsurance)
+    );
 
   return {
-    id: 1 + mostRecentPurchase.id || 1,
-    date: date,
-    formattedDate: formatDate(date),
     amount: amountPaid,
-    principal: mostRecentPurchase.principal - appliedToPrincipal,
+    principal: remainingPrincipal - appliedToPrincipal,
     appliedToInterest: appliedToInterest,
     appliedToPrincipal: appliedToPrincipal,
     appliedToPropertyTax: appliedToPropertyTax,
     appliedToPropertyInsurance: appliedToPropertyInsurance
+  };
+}
+
+// Returns a month object:
+// { id, date, nominalPayment, payment }
+// payment is the actual payment made,
+// nominalPayment is the bank-proscribed minimum payment
+function calculateNextPayment(loanDetails, previousPayment) {
+  const date = addMonths(previousPayment.date, 1),
+    monthlyInterestRate = loanDetails.loanInterest / 1200.0;
+
+  let minimumPaymentRequired = minimumMonthlyPayment(loanDetails);
+  let payment = calculatePayment(
+    minimumPaymentRequired + loanDetails.monthlyOverpay,
+    loanDetails,
+    previousPayment.payment.principal
+  );
+
+  let nominalPayment = calculatePayment(
+    minimumPaymentRequired,
+    loanDetails,
+    previousPayment.nominalPayment.principal
+  );
+
+  let interestSaved =
+    (nominalPayment.principal - payment.principal) * monthlyInterestRate;
+
+  return {
+    id: 1 + previousPayment.id || 1,
+    date: date,
+    formattedDate: formatDate(date),
+    payment: payment,
+    nominalPayment: nominalPayment,
+    interestSaved: interestSaved,
+    totalInterestSaved: interestSaved + previousPayment.totalInterestSaved
   };
 }
 
@@ -71,8 +93,11 @@ function calculateMonthlyPayments(loanDetails) {
     [
       {
         date: loanDetails.loanStart,
-        amount: 0.0,
-        principal: loanDetails.loanAmount
+        formattedDate: formatDate(loanDetails.loanStart),
+        interestSaved: 0,
+        totalInterestSaved: 0,
+        payment: { amount: 0.0, principal: loanDetails.loanAmount },
+        nominalPayment: { amount: 0.0, principal: loanDetails.loanAmount }
       }
     ]
   );

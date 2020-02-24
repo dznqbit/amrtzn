@@ -8,12 +8,9 @@ function decodeLoanJson(json) {
   }
 
   let loanDetails = JSON.parse(json);
+
+  loanDetails.loanAmount = Number(loanDetails.loanAmount);
   loanDetails.loanStart = new Date(loanDetails.loanStart);
-
-  if (isNaN(loanDetails.loanStart)) {
-    loanDetails.loanStart = new Date();
-  }
-
   loanDetails.loanInterest = Number(loanDetails.loanInterest);
   loanDetails.monthlyOverpay = Number(loanDetails.monthlyOverpay);
 

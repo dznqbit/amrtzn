@@ -15,7 +15,7 @@ export default function PaymentCalculator(props) {
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
-            value={mp.principal}
+            value={mp.payment.principal}
             displayType="text"
             prefix="$"
             decimalScale="2"
@@ -23,16 +23,7 @@ export default function PaymentCalculator(props) {
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
-            value={mp.amount}
-            displayType="text"
-            prefix="$"
-            decimalScale="2"
-            thousandSeparator={true}
-          />
-        </td>
-        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
-          <NumberFormat
-            value={mp.appliedToPrincipal}
+            value={mp.payment.amount}
             displayType="text"
             prefix="$"
             decimalScale="2"
@@ -41,7 +32,7 @@ export default function PaymentCalculator(props) {
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
-            value={mp.appliedToInterest}
+            value={mp.payment.appliedToPrincipal}
             displayType="text"
             prefix="$"
             decimalScale="2"
@@ -50,7 +41,7 @@ export default function PaymentCalculator(props) {
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
-            value={mp.appliedToPropertyTax}
+            value={mp.payment.appliedToInterest}
             displayType="text"
             prefix="$"
             decimalScale="2"
@@ -59,7 +50,34 @@ export default function PaymentCalculator(props) {
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
-            value={mp.appliedToPropertyInsurance}
+            value={mp.interestSaved}
+            displayType="text"
+            prefix="$"
+            decimalScale="2"
+            thousandSeparator={true}
+          />
+        </td>
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
+          <NumberFormat
+            value={mp.totalInterestSaved}
+            displayType="text"
+            prefix="$"
+            decimalScale="2"
+            thousandSeparator={true}
+          />
+        </td>
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
+          <NumberFormat
+            value={mp.payment.appliedToPropertyTax}
+            displayType="text"
+            prefix="$"
+            decimalScale="2"
+            thousandSeparator={true}
+          />
+        </td>
+        <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
+          <NumberFormat
+            value={mp.payment.appliedToPropertyInsurance}
             displayType="text"
             prefix="$"
             decimalScale="2"
@@ -93,6 +111,12 @@ export default function PaymentCalculator(props) {
             </th>
             <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
               To Interest
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              Interest Saved
+            </th>
+            <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
+              Total Interest Saved
             </th>
             <th className="PaymentCalculator__cell PaymentCalculator__cell--number">
               To Property Tax

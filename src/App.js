@@ -13,6 +13,14 @@ const useStateWithLocalStorage = (localStorageKey, defaultValue) => {
   let serializedLocalValue = localStorage.getItem(localStorageKey);
   let localValue = decodeLoanJson(serializedLocalValue);
 
+  if (isNaN(localValue.loanStart)) {
+    localValue.loanStart = new Date();
+  }
+
+  if (!localValue.payments) {
+    localValue.payments = [];
+  }
+
   const [value, setValue] = useState(localValue || defaultValue);
   React.useEffect(() => {
     localStorage.setItem(localStorageKey, encodeLoanJson(value));
