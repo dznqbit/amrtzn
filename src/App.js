@@ -1,52 +1,41 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
+import { calculateMonthlyPayments } from "./amrtzn/calculator";
+
 import Changelog from "./Changelog";
+import { encodeLoanJson, decodeLoanJson } from "./amrtzn/json";
 import Form from "./Form";
 import PaymentCalculator from "./PaymentCalculator";
 import "./App.scss";
 
-function parseLoanDetails(loanDetailsString) {
-  if (!loanDetailsString) {
-    return null;
-  }
-
-  let loanDetails = JSON.parse(loanDetailsString);
-  loanDetails.loanStart = new Date(loanDetails.loanStart);
-
-  if (isNaN(loanDetails.loanStart)) {
-    loanDetails.loanStart = new Date();
-  }
-
-  loanDetails.loanInterest = Number(loanDetails.loanInterest);
-  loanDetails.monthlyOverpay = Number(loanDetails.monthlyOverpay);
-
-  return loanDetails;
-}
-
 const useStateWithLocalStorage = (localStorageKey, defaultValue) => {
   let serializedLocalValue = localStorage.getItem(localStorageKey);
-  let localValue = parseLoanDetails(serializedLocalValue);
+  let localValue = decodeLoanJson(serializedLocalValue);
 
   const [value, setValue] = useState(localValue || defaultValue);
   React.useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(value));
+    localStorage.setItem(localStorageKey, encodeLoanJson(value));
   }, [localStorageKey, value]);
   return [value, setValue];
 };
 
 const App = () => {
+  let defaultLoanDetails = {
+    loanStart: new Date(),
+    loanAmount: 300000,
+    loanInterest: 4.0,
+    loanDuration: 30,
+    monthlyOverpay: 0,
+    payments: [],
+    propertyTax: 500,
+    propertyInsurance: 1200
+  };
+
+  defaultLoanDetails.payments = calculateMonthlyPayments(defaultLoanDetails);
   const [loanDetails, setLoanDetails] = useStateWithLocalStorage(
     "loanDetails",
-    {
-      loanStart: new Date(),
-      loanAmount: 300000,
-      loanInterest: 4.0,
-      loanDuration: 30,
-      monthlyOverpay: 0,
-      propertyTax: 500,
-      propertyInsurance: 1200
-    }
+    defaultLoanDetails
   );
 
   return (

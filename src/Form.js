@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import NumberFormat from "react-number-format";
 import DatePicker from "react-datepicker";
 
-import { minimumMonthlyPayment } from "./amrtzn/calculator";
+import {
+  calculateMonthlyPayments,
+  minimumMonthlyPayment
+} from "./amrtzn/calculator";
 
 import "./Form.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -46,7 +49,8 @@ export default function Form(props) {
       propertyInsurance: propertyInsurance
     };
 
-    console.log(loanDetails);
+    loanDetails.payments = calculateMonthlyPayments(loanDetails);
+
     props.update(loanDetails);
   }
 
