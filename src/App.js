@@ -34,7 +34,8 @@ const App = () => {
     loanAmount: 300000,
     loanInterest: 4.0,
     loanDuration: 30,
-    monthlyOverpay: 0,
+    minimumPayment: 0,
+    paymentAmount: 0,
     payments: [],
     propertyTax: 500,
     propertyInsurance: 1200

@@ -12,6 +12,7 @@ function minimumMonthlyPayment(loanDetails) {
     monthlyInterestRate = nominalInterestRate / 12.0,
     monthlyPropertyTax = loanDetails.propertyTax / 12.0,
     monthlyPropertyInsurance = loanDetails.propertyInsurance / 12.0;
+
   // https://en.wikipedia.org/wiki/Fixed-rate_mortgage
   const paymentRequired =
     (p * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -n)) +
@@ -23,7 +24,7 @@ function minimumMonthlyPayment(loanDetails) {
 // Return a payment object:
 // { amount, principal, appliedToInterest, appliedToPrincipal,
 //    appliedToPropertyTax, appliedToPropertyInsurance }
-function calculatePayment(amountPaid, loanDetails, remainingPrincipal) {
+function calculatePayment(paymentAmount, loanDetails, remainingPrincipal) {
   const nominalInterestRate = loanDetails.loanInterest / 100.0,
     monthlyInterestRate = nominalInterestRate / 12.0,
     monthlyPropertyTax = loanDetails.propertyTax / 12.0,
@@ -34,12 +35,12 @@ function calculatePayment(amountPaid, loanDetails, remainingPrincipal) {
     appliedToPropertyInsurance = monthlyPropertyInsurance,
     appliedToPrincipal = Math.min(
       remainingPrincipal,
-      amountPaid -
+      paymentAmount -
         (appliedToInterest + appliedToPropertyTax + appliedToPropertyInsurance)
     );
 
   return {
-    amount: amountPaid,
+    amount: paymentAmount,
     principal: remainingPrincipal - appliedToPrincipal,
     appliedToInterest: appliedToInterest,
     appliedToPrincipal: appliedToPrincipal,
@@ -56,15 +57,14 @@ function calculateNextPayment(loanDetails, previousPayment) {
   const date = addMonths(previousPayment.date, 1),
     monthlyInterestRate = loanDetails.loanInterest / 1200.0;
 
-  let minimumPaymentRequired = minimumMonthlyPayment(loanDetails);
   let payment = calculatePayment(
-    minimumPaymentRequired + loanDetails.monthlyOverpay,
+    loanDetails.paymentAmount,
     loanDetails,
     previousPayment.payment.principal
   );
 
   let nominalPayment = calculatePayment(
-    minimumPaymentRequired,
+    loanDetails.minimumPaymentAmount,
     loanDetails,
     previousPayment.nominalPayment.principal
   );

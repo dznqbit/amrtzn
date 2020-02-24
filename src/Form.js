@@ -16,15 +16,11 @@ export default function Form(props) {
   const [loanAmount, setLoanAmount] = useState(loanDetails.loanAmount);
   const [loanInterest, setLoanInterest] = useState(loanDetails.loanInterest);
   const [loanDuration, setLoanDuration] = useState(loanDetails.loanDuration);
-  const [monthlyOverpay, setMonthlyOverpay] = useState(
-    loanDetails.monthlyOverpay
-  );
+  const [paymentAmount, setPaymentAmount] = useState(loanDetails.amount);
   const [propertyTax, setPropertyTax] = useState(loanDetails.propertyTax);
   const [propertyInsurance, setPropertyInsurance] = useState(
     loanDetails.propertyInsurance
   );
-
-  const minimumPayment = minimumMonthlyPayment(loanDetails);
 
   function keyDown(e) {
     const { key } = e;
@@ -39,14 +35,23 @@ export default function Form(props) {
       evt.preventDefault();
     }
 
+    const minimumPaymentAmount = minimumMonthlyPayment({
+      loanAmount: loanAmount,
+      loanInterest: loanInterest,
+      loanDuration: loanDuration,
+      propertyTax: propertyTax,
+      propertyInsurance: propertyInsurance
+    });
+
     const loanDetails = {
       loanStart: loanStart,
       loanAmount: loanAmount,
       loanInterest: loanInterest,
       loanDuration: loanDuration,
-      monthlyOverpay: Number(monthlyOverpay),
       propertyTax: propertyTax,
-      propertyInsurance: propertyInsurance
+      propertyInsurance: propertyInsurance,
+      minimumPaymentAmount: minimumPaymentAmount,
+      paymentAmount: paymentAmount || minimumPaymentAmount
     };
 
     loanDetails.payments = calculateMonthlyPayments(loanDetails);
@@ -137,7 +142,7 @@ export default function Form(props) {
           <label className="Form__field">
             <span className="Form__label">Minimum Payment</span>
             <NumberFormat
-              value={minimumPayment}
+              value={loanDetails.minimumPaymentAmount}
               prefix="$ "
               suffix="  "
               decimalScale="2"
@@ -150,10 +155,10 @@ export default function Form(props) {
           </label>
 
           <label className="Form__field">
-            <span className="Form__label">Addt'l Payment</span>
+            <span className="Form__label">Payment</span>
             <NumberFormat
-              value={monthlyOverpay}
-              onValueChange={v => setMonthlyOverpay(v.value)}
+              value={paymentAmount}
+              onValueChange={v => setPaymentAmount(v.value)}
               onKeyDown={keyDown}
               prefix="$ "
               suffix="  "

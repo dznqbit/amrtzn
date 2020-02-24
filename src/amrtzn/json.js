@@ -12,7 +12,8 @@ function decodeLoanJson(json) {
   loanDetails.loanAmount = Number(loanDetails.loanAmount);
   loanDetails.loanStart = new Date(loanDetails.loanStart);
   loanDetails.loanInterest = Number(loanDetails.loanInterest);
-  loanDetails.monthlyOverpay = Number(loanDetails.monthlyOverpay);
+  loanDetails.minimumPayment = Number(loanDetails.minimumPayment);
+  loanDetails.paymentAmount = Number(loanDetails.paymentAmount);
 
   return loanDetails;
 }
