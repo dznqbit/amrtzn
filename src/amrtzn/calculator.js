@@ -1,4 +1,4 @@
-export default function minimumMonthlyPayment(loanDetails) {
+function minimumMonthlyPayment(loanDetails) {
   const p = loanDetails.loanAmount,
     n = 12 * loanDetails.loanDuration,
     nominalInterestRate = loanDetails.loanInterest / 100.0,
@@ -12,3 +12,5 @@ export default function minimumMonthlyPayment(loanDetails) {
 
   return paymentRequired;
 }
+
+export { minimumMonthlyPayment };

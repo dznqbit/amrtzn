@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import NumberFormat from "react-number-format";
 import DatePicker from "react-datepicker";
 
-import minimumMonthlyPayment from "./amrtzn/minimumMonthlyPayment";
+import { minimumMonthlyPayment } from "./amrtzn/calculator";
 
 import "./Form.scss";
 import "react-datepicker/dist/react-datepicker.css";

@@ -3,7 +3,7 @@ import NumberFormat from "react-number-format";
 
 import format from "date-fns/format";
 import addMonths from "date-fns/addMonths";
-import minimumMonthlyPayment from "./amrtzn/minimumMonthlyPayment";
+import { minimumMonthlyPayment } from "./amrtzn/calculator";
 
 import "./PaymentCalculator.scss";
 
