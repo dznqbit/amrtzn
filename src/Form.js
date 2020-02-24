@@ -29,7 +29,7 @@ export default function Form(props) {
   function keyDown(e) {
     const { key } = e;
 
-    if (key == "Enter") {
+    if (key === "Enter") {
       handleSubmit();
     }
   }
