@@ -13,12 +13,18 @@ const useStateWithLocalStorage = (localStorageKey, defaultValue) => {
   let serializedLocalValue = localStorage.getItem(localStorageKey);
   let localValue = decodeLoanJson(serializedLocalValue);
 
-  if (isNaN(localValue.loanStart)) {
-    localValue.loanStart = new Date();
-  }
+  if (localValue) {
+    if (isNaN(localValue.loanStart)) {
+      localValue.loanStart = new Date();
+    }
 
-  if (!localValue.payments) {
-    localValue.payments = [];
+    if (isNaN(localValue.paymentAmount)) {
+      localValue.paymentAmount = localValue.minimumPaymentAmount;
+    }
+
+    if (!localValue.payments) {
+      localValue.payments = [];
+    }
   }
 
   const [value, setValue] = useState(localValue || defaultValue);
@@ -34,7 +40,7 @@ const App = () => {
     loanAmount: 300000,
     loanInterest: 4.0,
     loanDuration: 30,
-    minimumPayment: 0,
+    minimumPaymentAmount: 0,
     paymentAmount: 0,
     payments: [],
     propertyTax: 500,
