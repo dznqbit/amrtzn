@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import NumberFormat from "react-number-format";
 import DatePicker from "react-datepicker";
-
-import {
-  calculateMonthlyPayments,
-  minimumMonthlyPayment
-} from "./amrtzn/calculator";
+import { minimumMonthlyPayment } from "./amrtzn/calculator";
 
 import "./Form.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -43,8 +39,7 @@ export default function Form(props) {
     );
 
     setPaymentAmount(minimumPaymentAmount);
-
-    recalculatePayments();
+    updateLoanDetails();
   }
 
   function submitPaymentDetails(evt) {
@@ -52,10 +47,10 @@ export default function Form(props) {
       evt.preventDefault();
     }
 
-    recalculatePayments();
+    updateLoanDetails();
   }
 
-  function recalculatePayments() {
+  function updateLoanDetails() {
     const loanDetails = {
       loanStart: loanStart,
       loanAmount: loanAmount,
@@ -67,7 +62,6 @@ export default function Form(props) {
       paymentAmount: paymentAmount
     };
 
-    loanDetails.payments = calculateMonthlyPayments(loanDetails);
     props.update(loanDetails);
   }
 

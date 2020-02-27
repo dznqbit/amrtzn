@@ -53,6 +53,11 @@ const App = () => {
     defaultLoanDetails
   );
 
+  const setLoanDetailsAndRecalculatePayments = loanDetails => {
+    loanDetails.payments = calculateMonthlyPayments(loanDetails);
+    setLoanDetails(loanDetails);
+  };
+
   return (
     <div className="App">
       <header className="App__header">
@@ -66,7 +71,10 @@ const App = () => {
         <Router>
           <Route path="/changelog" component={Changelog} />
           <Route exact path="/">
-            <Form loanDetails={loanDetails} update={setLoanDetails} />
+            <Form
+              loanDetails={loanDetails}
+              update={setLoanDetailsAndRecalculatePayments}
+            />
             <PaymentCalculator loanDetails={loanDetails} />
           </Route>
         </Router>
