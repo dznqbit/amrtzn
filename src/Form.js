@@ -28,18 +28,23 @@ export default function Form(props) {
       evt.preventDefault();
     }
 
-    setMinimumPaymentAmount(
-      minimumMonthlyPayment({
-        loanAmount: loanAmount,
-        loanInterest: loanInterest,
-        loanDuration: loanDuration,
-        propertyTax: propertyTax,
-        propertyInsurance: propertyInsurance
-      })
-    );
+    let newMinimumPaymentAmount = minimumMonthlyPayment({
+      loanAmount: loanAmount,
+      loanInterest: loanInterest,
+      loanDuration: loanDuration,
+      propertyTax: propertyTax,
+      propertyInsurance: propertyInsurance
+    });
 
-    setPaymentAmount(minimumPaymentAmount);
-    updateLoanDetails();
+    // This seems clumsy, but the state hooks seem to defer assignment to
+    // the immediate variables until a re-render ... and thats too late
+    setMinimumPaymentAmount(newMinimumPaymentAmount);
+    setPaymentAmount(newMinimumPaymentAmount);
+
+    updateLoanDetails({
+      minimumPaymentAmount: newMinimumPaymentAmount,
+      paymentAmount: newMinimumPaymentAmount
+    });
   }
 
   function submitPaymentDetails(evt) {
@@ -50,7 +55,9 @@ export default function Form(props) {
     updateLoanDetails();
   }
 
-  function updateLoanDetails() {
+  function updateLoanDetails(newLoanDetails) {
+    let ld = newLoanDetails || {};
+
     const loanDetails = {
       loanStart: loanStart,
       loanAmount: loanAmount,
@@ -58,10 +65,11 @@ export default function Form(props) {
       loanDuration: loanDuration,
       propertyTax: propertyTax,
       propertyInsurance: propertyInsurance,
-      minimumPaymentAmount: minimumPaymentAmount,
-      paymentAmount: paymentAmount
+      minimumPaymentAmount: ld.minimumPaymentAmount || minimumPaymentAmount,
+      paymentAmount: ld.paymentAmount || paymentAmount
     };
 
+    console.log("Loan Details", loanDetails);
     props.update(loanDetails);
   }
 

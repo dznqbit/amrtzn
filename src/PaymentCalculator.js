@@ -5,6 +5,24 @@ import "./PaymentCalculator.scss";
 
 export default function PaymentCalculator(props) {
   const loanDetails = props.loanDetails;
+
+  const paymentRowKeyDown = (monthlyPayment, evt) => {
+    const key = evt.key;
+    const newPaymentAmount = evt.target.value;
+
+    switch (key) {
+      case "Enter":
+        monthlyPayment.payment.amount = newPaymentAmount;
+        break;
+      case "Escape":
+        break;
+      default:
+        return;
+    }
+
+    props.updateMonthlyPayment(monthlyPayment);
+  };
+
   const monthlyPaymentHtml = loanDetails.payments
     .map(mp => mp)
     .map((mp, i) => (
@@ -23,11 +41,14 @@ export default function PaymentCalculator(props) {
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
           <NumberFormat
+            className="PaymentCalculator__input"
             value={mp.payment.amount}
-            displayType="text"
+            onKeyDown={e => paymentRowKeyDown(mp, e)}
             prefix="$"
             decimalScale="2"
             thousandSeparator={true}
+            decimalSeparator="."
+            allowNegative={false}
           />
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
