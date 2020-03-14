@@ -62,8 +62,13 @@ const App = () => {
   };
 
   const updateMonthlyPayment2 = monthlyPayment => {
-    loanDetails.payments = updateMonthlyPayment(loanDetails, monthlyPayment);
-    setLoanDetails(loanDetails);
+    const newLoanDetails = {
+      ...loanDetails,
+      payments: updateMonthlyPayment(loanDetails, monthlyPayment)
+    };
+
+    // console.log(newLoanDetails.payments);
+    setLoanDetails(newLoanDetails);
   };
 
   return (

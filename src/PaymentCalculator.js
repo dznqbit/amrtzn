@@ -12,7 +12,9 @@ export default function PaymentCalculator(props) {
 
     switch (key) {
       case "Enter":
-        monthlyPayment.payment.amount = newPaymentAmount;
+        monthlyPayment.payment.amount = Number(
+          newPaymentAmount.replace(/[^0-9-]/g, "")
+        );
         break;
       case "Escape":
         break;

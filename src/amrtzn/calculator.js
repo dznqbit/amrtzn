@@ -106,6 +106,8 @@ function calculateMonthlyPayments(loanDetails) {
   return payments;
 }
 
+// Replace a monthlyPayment and recalculate following payments
+// Returns a new monthlyPayments array
 function updateMonthlyPayment(loanDetails, updatedMonthlyPayment) {
   const n = 12 * loanDetails.loanDuration;
   const i = loanDetails.payments.findIndex(
@@ -116,13 +118,25 @@ function updateMonthlyPayment(loanDetails, updatedMonthlyPayment) {
     return loanDetails;
   }
 
+  // Set up a new monthlyPayments array
   let newMonthlyPayments = loanDetails.payments.slice(0, i);
-  const priorRemainingPrincipal =
-    newMonthlyPayments[newMonthlyPayments.length - 1].payment
-      .remainingPrincipal;
+  const priorRemainingPrincipal = (() => {
+    if (newMonthlyPayments.length === 0) {
+      return loanDetails.loanAmount;
+    } else {
+      return newMonthlyPayments[newMonthlyPayments.length - 1].payment
+        .principal;
+    }
+  })();
 
-  const newPaymentAmount = updatedMonthlyPayment.payment.amount;
-  calculatePayment(newPaymentAmount, loanDetails, priorRemainingPrincipal);
+  let replacementMonthlyPayment = calculatePayment(
+    updatedMonthlyPayment.payment.amount,
+    loanDetails,
+    priorRemainingPrincipal
+  );
+
+  updatedMonthlyPayment.payment = replacementMonthlyPayment;
+
   newMonthlyPayments.push(updatedMonthlyPayment);
 
   while (newMonthlyPayments.length < n) {
