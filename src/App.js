@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { calculateMonthlyPayments } from "./amrtzn/calculator";
+import {
+  calculateMonthlyPayments,
+  updateMonthlyPayment
+} from "./amrtzn/calculator";
 
 import Changelog from "./Changelog";
 import { encodeLoanJson, decodeLoanJson } from "./amrtzn/json";
@@ -58,6 +61,11 @@ const App = () => {
     setLoanDetails(loanDetails);
   };
 
+  const updateMonthlyPayment2 = monthlyPayment => {
+    loanDetails.payments = updateMonthlyPayment(loanDetails, monthlyPayment);
+    setLoanDetails(loanDetails);
+  };
+
   return (
     <div className="App">
       <header className="App__header">
@@ -75,7 +83,10 @@ const App = () => {
               loanDetails={loanDetails}
               update={setLoanDetailsAndRecalculatePayments}
             />
-            <PaymentCalculator loanDetails={loanDetails} />
+            <PaymentCalculator
+              loanDetails={loanDetails}
+              updateMonthlyPayment={updateMonthlyPayment2}
+            />
           </Route>
         </Router>
       </main>

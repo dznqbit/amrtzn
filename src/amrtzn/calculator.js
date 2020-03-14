@@ -106,4 +106,39 @@ function calculateMonthlyPayments(loanDetails) {
   return payments;
 }
 
-export { calculateMonthlyPayments, minimumMonthlyPayment };
+function updateMonthlyPayment(loanDetails, updatedMonthlyPayment) {
+  const n = 12 * loanDetails.loanDuration;
+  const i = loanDetails.payments.findIndex(
+    mp => mp.id === updatedMonthlyPayment.id
+  );
+
+  if (i < 0) {
+    return loanDetails;
+  }
+
+  let newMonthlyPayments = loanDetails.payments.slice(0, i);
+  const priorRemainingPrincipal =
+    newMonthlyPayments[newMonthlyPayments.length - 1].payment
+      .remainingPrincipal;
+
+  const newPaymentAmount = updatedMonthlyPayment.payment.amount;
+  calculatePayment(newPaymentAmount, loanDetails, priorRemainingPrincipal);
+  newMonthlyPayments.push(updatedMonthlyPayment);
+
+  while (newMonthlyPayments.length < n) {
+    newMonthlyPayments.push(
+      calculateNextPayment(
+        loanDetails,
+        newMonthlyPayments[newMonthlyPayments.length - 1]
+      )
+    );
+  }
+
+  return newMonthlyPayments;
+}
+
+export {
+  calculateMonthlyPayments,
+  minimumMonthlyPayment,
+  updateMonthlyPayment
+};

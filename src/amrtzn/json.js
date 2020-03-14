@@ -15,6 +15,11 @@ function decodeLoanJson(json) {
   loanDetails.minimumPayment = Number(loanDetails.minimumPayment);
   loanDetails.paymentAmount = Number(loanDetails.paymentAmount);
 
+  loanDetails.payments = loanDetails.payments.map(function(mp) {
+    mp.date = new Date(mp.date);
+    return mp;
+  });
+
   return loanDetails;
 }
 
