@@ -26,3 +26,19 @@
     text-align: right;
   }
 }
+
+.PaymentCalculator__input {
+  @include font-monospace;
+
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  text-align: right;
+  padding-right: 10px;
+
+  /* stylelint-disable */
+  &:focus {
+  /* stylelint-enable */
+    border-bottom: 2px solid #bbb;
+  }
+}
