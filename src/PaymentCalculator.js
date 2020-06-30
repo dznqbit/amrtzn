@@ -51,6 +51,7 @@ export default function PaymentCalculator(props) {
             thousandSeparator={true}
             decimalSeparator="."
             allowNegative={false}
+            onFocus={e => e.target.select()}
           />
         </td>
         <td className="PaymentCalculator__cell PaymentCalculator__cell--number">
